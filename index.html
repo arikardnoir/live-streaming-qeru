@@ -1,0 +1,32 @@
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<!-- Or if you want a more recent canary version -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/hls.js@canary"></script> -->
+<video id="video" class="video-centered" autoplay="true"
+muted="muted"></video>
+<script>
+  // alert()
+  var video = document.getElementById('video');
+  if(Hls.isSupported()) {
+    var hls = new Hls();
+    hls.loadSource('http://localhost:8080/media/1/stream');
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,function() {
+      console.log("Hello, Good Morning")
+      video.play();
+  });
+ } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = 'http://localhost:8080/media/1/stream';
+    video.addEventListener('loadedmetadata',function() {
+      video.play();
+    });
+  }
+</script>
+<style>
+  .video-centered{
+    width: 80%;
+    border: 1px solid;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+</style>
