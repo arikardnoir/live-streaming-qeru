@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gorilla/mux"
 )
 
 func main() {
-	const port = 8080
+	var port = GetPort()
 	http.Handle("/", handlers())
 
-	fmt.Printf("Starting server on %v\n", port)
+	fmt.Printf("Starting server on %s\n", port)
 	// serve and log errors
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s", port), nil))
 }
 
 func handlers() *mux.Router {
@@ -67,4 +68,15 @@ func serveHlsTs(w http.ResponseWriter, r *http.Request, mediaBase, segName strin
 	http.ServeFile(w, r, mediaFile)
 	w.Header().Set("Content-Type", "video/MP2T")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+//GetPort is getting the port from the environment so we can run on Heroku
+func GetPort() string {
+	var port = os.Getenv("PORT")
+	// Set a default port if there is nothing in the environment
+	if port == "" {
+		port = "5000"
+		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+	}
+	return ":" + port
 }
