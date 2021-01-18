@@ -8,14 +8,14 @@ muted="muted"></video>
   var video = document.getElementById('video');
   if(Hls.isSupported()) {
     var hls = new Hls();
-    hls.loadSource('http://localhost:8080/media/1/stream');
+    hls.loadSource('https://live-streaming-qeru.herokuapp.com/media/1/stream');
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED,function() {
       console.log("Hello, Good Morning")
       video.play();
   });
  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = 'http://localhost:8080/media/1/stream';
+    video.src = 'https://live-streaming-qeru.herokuapp.com/media/1/stream';
     video.addEventListener('loadedmetadata',function() {
       video.play();
     });
